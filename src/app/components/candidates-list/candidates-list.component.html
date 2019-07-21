@@ -1,0 +1,7 @@
+<p>
+  candidates-list works!
+</p>
+<span *ngIf="errorMessage">{{errorMessage}}</span>
+<div *ngFor="let candidate of candidates">
+  <app-candidate-item [candidateProfile]="candidate"></app-candidate-item>
+</div>
