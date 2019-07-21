@@ -4,6 +4,7 @@ import { CandidatesListComponent } from './components/candidates-list/candidates
 import { PageNotfoundComponent } from './components/page-notfound/page-notfound.component';
 import { CandidateFormPageComponent } from './components/candidate-form-page/candidate-form-page.component';
 import { CandidatDetailComponent } from './components/candidat-detail/candidat-detail.component';
+import { CandidateFormCanDeactivateService } from './services/CandidateFormCanDeactivate.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'candidates', pathMatch: 'full' },
@@ -17,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'edit/:id',
-    component: CandidateFormPageComponent
+    component: CandidateFormPageComponent,
+    canDeactivate: [CandidateFormCanDeactivateService]
   }
   ,
   {

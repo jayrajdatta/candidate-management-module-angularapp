@@ -19,18 +19,19 @@ export class CandidateFormPageComponent implements OnInit {
   panelTitle: string;
   private _id: number;
   datePickerConfig: Partial<BsDatepickerConfig>;
+  private file: File;
 
   constructor(private _candidateProfileService: CandidateProfileService
     , private _router: Router
     , private _route: ActivatedRoute) {
-      this.datePickerConfig = Object.assign({},
-        {
-          containerClass: 'theme-dark-blue',
-          showWeekNumbers: false,        
-          adaptivePosition: true,
-          dateInputFormat: 'YYYY-MM-DD'
-        });
-     }
+    this.datePickerConfig = Object.assign({},
+      {
+        containerClass: 'theme-dark-blue',
+        showWeekNumbers: false,
+        adaptivePosition: true,
+        dateInputFormat: 'YYYY-MM-DD'
+      });
+  }
 
   ngOnInit() {
     debugger;
@@ -63,10 +64,19 @@ export class CandidateFormPageComponent implements OnInit {
 
   saveCandidate() {
     console.log(this.candidate); //to check form properties - dirty, valid, value etc
+
+
+
     const newCandidate: Candidate = Object.assign({}, this.candidate);
-    this._candidateProfileService.AddEditCandidate(newCandidate).subscribe(res => {
+    this._candidateProfileService.AddEditCandidate(newCandidate, this.file).subscribe(res => {
       this.CreateCandidateForm.resetForm(this.candidate);
       this._router.navigate(['candidates']);
     });
+  }
+  onFileSelect(fileInput: any) {
+    debugger;
+    if (fileInput.target.files && fileInput.target.files.length > 0) {
+      this.file = fileInput.target.files[0];
+    }
   }
 }

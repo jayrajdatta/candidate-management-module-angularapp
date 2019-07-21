@@ -24,4 +24,16 @@ export class CandidatDetailComponent implements OnInit {
     });
   }
 
+  downloadFile() {
+    console.log(this._id);
+    this._candidateProfileService.downloadFile(this._id)
+      .subscribe((fileData: BlobPart) => {
+        debugger;
+        let b: any = new Blob([fileData], { type: 'application/octet-stream' });
+        var url = window.URL.createObjectURL(b);
+        window.open(url);
+      });
+  }
+
+
 }

@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpHeaderResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map, retry, catchError } from 'rxjs/operators';
 
 import { Candidate } from '../models/candidate.model'
 import { environment } from 'src/environments/environment';
+
+interface IResponse {
+  id: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -55,22 +59,38 @@ export class CandidateProfileService {
       );
   }
 
-  public AddEditCandidate(candidate: Candidate): Observable<any> {
-    debugger;
+  public AddEditCandidate(candidate: Candidate, file: File): Observable<any> {
     const subject = new Subject<any>();
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache'
     });
-    //const options = new RequestOptions({ headers: headers });
     const options = { headers: headers };
 
     this._httpClient
       .post(environment.API_URL + 'api/candidates/addcandidate',
         JSON.stringify(candidate), options)
       .subscribe(
-        res => {
+        (res: IResponse) => {
           console.log(res);
+
+          //upload the profile document file
+          if (file != null) {
+            const formData = new FormData();
+            formData.append('id', res.id);
+            formData.append('file', file);
+
+            this._httpClient
+              .post(environment.API_URL + 'api/candidates/uploadfile', formData)
+              .subscribe(
+                res => {
+                  //debugger;
+                  console.log(res);
+                  subject.next(res);
+                  subject.complete();
+                });
+          }
+
           subject.next(res);
           subject.complete();
         },
@@ -92,6 +112,12 @@ export class CandidateProfileService {
         err => {
           console.log(err);
         });
+  }
+
+  public downloadFile(id: number) {
+    debugger;
+    return this._httpClient
+      .get(environment.API_URL + 'api/candidates/getfile?candidateId=' + id, { responseType: 'blob' as 'json' });
   }
 
 
