@@ -104,7 +104,7 @@ export class CandidateProfileService {
 
   public deleteCandidate(id: number) {
     return this._httpClient
-      .delete(environment.API_URL + '/api/candidates?id=' + id)
+      .delete(environment.API_URL + '/api/candidates/deletecandidate?id=' + id)
       .subscribe(
         res => {
           console.log(res);
