@@ -1,7 +1,8 @@
-<p>
-  candidates-list works!
-</p>
+<div class="form-group">
+  <input type="text" class="form-control" placeholder="Search By Name" [(ngModel)]="searchTerm" />
+</div>
 <span *ngIf="errorMessage">{{errorMessage}}</span>
-<div *ngFor="let candidate of candidates">
+<div *ngFor="let candidate of filteredCandidates | paginate: config">
   <app-candidate-item [candidateProfile]="candidate"></app-candidate-item>
 </div>
+<pagination-controls [autoHide]="true" (pageChange)="pageChanged($event)"></pagination-controls>
