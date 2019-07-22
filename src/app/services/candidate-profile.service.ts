@@ -46,10 +46,11 @@ export class CandidateProfileService {
     return this._httpClient
       .get(environment.API_URL + 'api/candidates/getcandidate?id=' + id).pipe(
         retry(3),
-        map((response: Candidate[]) => {
-          response.forEach(candidate => {
+        map((response: Candidate) => {
+          /* response.forEach(candidate => {
             this.candidate = candidate;
-          });
+          }); */
+          this.candidate = response;
 
           return this.candidate;
         }),
